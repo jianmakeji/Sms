@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>木圣科技信使系统</title>
+  <link rel="stylesheet" type="text/css" href="public/css/lib/iview.css">
+  <link rel="stylesheet" type="text/css" href="public/css/src/frame.css" />
+  <link rel="stylesheet" type="text/css" href="public/css/src/index.css" />
+</head>
+<body>
+  <div id="content">
+    <div class="layout">
+         <layout>
+             <header-menu username="{{user.username}}" rolename="{{user.roles[0].name}}" activename="1"></header-menu>
+             <i-content :style="{padding: '0 50px'}">
+                 <breadcrumb :style="{margin: '20px 0'}">
+                     <breadcrumb-item>首页</breadcrumb-item>
+                     <breadcrumb-item>普通短信</breadcrumb-item>
+                 </breadcrumb>
+                 <card>
+                    <div class="content_area">
+                      <div class="content_block">
+                        <i-input v-model="sms_content" maxlength="1000" show-word-limit type="textarea" :rows="20" placeholder="请输入短信内容" style="width: 100%;"></i-input>
+                        <div style="height: 100px;">
+                          <i-button type="primary" style="margin-top: 20px;">检查屏蔽词</i-button>
+                        </div>
+
+                      </div>
+                      <div class="content_block">
+                        <i-input v-model="mobile_content" maxlength="120000" show-word-limit type="textarea" :rows="20" placeholder="请输入发送号码" style="width: 100%;"></i-input>
+                        <div style="height: 100px;">
+                          <p style="margin-top: 10px;">每次发送不超过1万个号码，当前共计号码为<span style="color: red;" v-model="mobileCount"></span>个</p>
+                          <div style="margin-top: 10px;">
+                            <i-button type="primary">Excel导入</i-button>
+                            <i-button type="primary">过滤错号</i-button>
+                            <i-button type="primary">过滤重号</i-button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="text-align: center;">
+                      <i-select v-model="channel" size="large" placement="top" placeholder="请选择发送通道" style="width:200px;z-index: 10;">
+                        <i-option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                      </i-select>
+                      <i-button type="success" size="large">发送</i-button>
+                      <i-button type="warning" size="large">清除</i-button>
+                    </div>
+                 </card>
+             </i-content>
+             <i-footer class="layout-footer-center">2019-2029 &copyright; </i-footer>
+         </layout>
+
+     </div>
+  </div>
+</body>
+<script type="text/javascript" src="public/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="public/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="public/js/lib/iview.min.js"></script>
+<script type="text/javascript" src="public/js/src/component/header.js"></script>
+<script type="text/javascript" src="public/js/src/index.js"></script>
+</html>

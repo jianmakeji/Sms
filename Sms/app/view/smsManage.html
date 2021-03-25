@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>木圣科技信使系统</title>
+  <link rel="stylesheet" type="text/css" href="public/css/lib/iview.css">
+  <link rel="stylesheet" type="text/css" href="public/css/src/frame.css" />
+  <link rel="stylesheet" type="text/css" href="public/css/src/smsManage.css" />
+</head>
+<body>
+  <div id="content">
+    <div class="layout">
+         <layout>
+             <header-menu username="{{user.username}}" rolename="{{user.roles[0].name}}" activename="3"></header-menu>
+             <i-content :style="{padding: '0 50px'}">
+                 <breadcrumb :style="{margin: '20px 0'}">
+                     <breadcrumb-item>首页</breadcrumb-item>
+                     <breadcrumb-item>短信管理</breadcrumb-item>
+                 </breadcrumb>
+                 <card>
+                   <div class="oper_area">
+                      <div>
+                        <i-input v-model="search_value" placeholder="请输入手机号码..." style="width: 300px"></i-input>
+                        <i-button @click="searchClick">搜索</i-button>
+                      </div>
+                      <i-select v-model="status" placeholder="请选择状态分类" style="width:200px;z-index: 10;">
+                        <i-option v-for="item in statuslList" :value="item.value" :key="item.value">${ item.label }</i-option>
+                      </i-select>
+                    </div>
+                    <div style="margin-top:10px;">
+                      <i-table border :columns="columns" :data="tableData"></i-table>
+                    </div>
+                    <div style="margin-top:20px;text-align:center">
+                      <Page :total="total" @on-change="pageChange" :current="currentPage" show-total/>
+                    </div>
+                 </card>
+             </i-content>
+             <i-footer class="layout-footer-center">2019-2029 &copyright; </i-footer>
+         </layout>
+     </div>
+
+  </div>
+</body>
+<script type="text/javascript" src="public/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="public/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="public/js/lib/iview.min.js"></script>
+<script type="text/javascript" src="public/js/src/component/header.js"></script>
+<script type="text/javascript" src="public/js/src/smsManage.js"></script>
+</html>

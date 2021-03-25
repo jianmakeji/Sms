@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>赛赛科技电子律师函系统</title>
+  <link rel="stylesheet" type="text/css" href="../public/css/lib/iview.css">
+  <link rel="stylesheet" type="text/css" href="../public/css/src/frame.css" />
+  <link rel="stylesheet" type="text/css" href="../public/css/src/user.css" />
+</head>
+<body>
+  <div id="content">
+    <div class="layout">
+         <layout>
+             <header-menu username="{{user.username}}" rolename="{{user.roles[0].name}}" activename="5"></header-menu>
+             <i-content :style="{padding: '0 50px'}">
+                 <breadcrumb :style="{margin: '20px 0'}">
+                     <breadcrumb-item>首页</breadcrumb-item>
+                     <breadcrumb-item>用户管理</breadcrumb-item>
+                 </breadcrumb>
+                 <card>
+                   <div>
+                     <i-button type="primary" @click="add">添加</i-button>
+                   </div>
+                   <div style="margin-top:10px;">
+                     <i-table border :columns="columns" :data="tableData"></i-table>
+                   </div>
+                   <div style="margin-top:20px;text-align:center">
+                     <Page :total="total" @on-change="pageChange" show-total/>
+                   </div>
+                 </card>
+             </i-content>
+             <i-footer class="layout-footer-center">2019-2029 &copyright; </i-footer>
+         </layout>
+         <modal
+            v-model="modal1"
+            title="创建用户"
+            @on-ok="ok"
+            :loading = "loading1"
+            @on-cancel="cancel">
+             <i-form :model="userForm" label-position="left" :label-width="100">
+               <form-item label="姓名">
+                   <i-input v-model="userForm.username"></i-input>
+               </form-item>
+               <form-item label="手机号码">
+                   <i-input v-model="userForm.mobile"></i-input>
+               </form-item>
+               <form-item label="密码">
+                   <i-input type="password" v-model="userForm.password"></i-input>
+               </form-item>
+               <form-item label="角色">
+                 <i-select v-model="userForm.role" placeholder="请选择角色" @on-change="changeSelect" style="width:200px">
+                   <i-option v-for="(item,index) in roleList" :value="item.value" :key="index">${ item.label }</i-option>
+                 </i-select>
+               </form-item>
+               <form-item label="状态">
+                 <radio-group v-model="userForm.status" @on-change="changeCondition">
+                     <radio label="启用"></radio>
+                     <radio label="关闭"></radio>
+                 </radio-group>
+               </form-item>
+             </i-form>
+        </modal>
+     </div>
+  </div>
+</body>
+<script type="text/javascript" src="../public/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../public/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="../public/js/lib/iview.min.js"></script>
+<script type="text/javascript" src="../public/js/src/conpoment/header.js"></script>
+<script type="text/javascript" src="../public/js/src/user.js"></script>
+</html>

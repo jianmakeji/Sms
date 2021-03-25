@@ -1,0 +1,36 @@
+#loginPanel{
+  position: relative;
+  width:100%;
+  height:calc(100% - 7em);
+}
+
+#formPanel {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 150px;
+  left: calc(50% - 150px);
+}
+
+.top {
+  top: 0;
+  height: 7em;
+  width: 100%;
+  background: #515a6e;
+  overflow: hidden;
+  line-height: 7em;
+}
+
+.logo{
+  width:auto;
+  height:6em;
+  vertical-align: middle;
+}
+
+h1{
+  color:white;
+  font-family: STKaiti;
+  font-size: 26px;
+  font-weight: bold;
+  margin-left: 60px;
+}
