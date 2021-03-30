@@ -24,7 +24,7 @@
                       <div class="content_block">
                         <i-input v-model="sms_content" maxlength="1000" show-word-limit type="textarea" :rows="20" placeholder="请输入短信内容" style="width: 100%;"></i-input>
                         <div style="height: 100px;">
-                          <i-button type="primary" style="margin-top: 20px;">检查屏蔽词</i-button>
+                          <i-button type="primary" style="margin-top: 20px;" @click="checkBlockWords">检查屏蔽词</i-button>
                         </div>
 
                       </div>
@@ -33,9 +33,10 @@
                         <div style="height: 100px;">
                           <p style="margin-top: 10px;">每次发送不超过1万个号码，当前共计号码为<span style="color: red;" v-model="mobileCount"></span>个</p>
                           <div style="margin-top: 10px;">
-                            <i-button type="primary">Excel导入</i-button>
-                            <i-button type="primary">过滤错号</i-button>
-                            <i-button type="primary">过滤重号</i-button>
+                            <i-button type="primary" @click="importTxt">txt导入</i-button>
+                            <i-button type="primary" @click="importExcel">Excel导入</i-button>
+                            <i-button type="primary" @click="filterErrorNumber">过滤错号</i-button>
+                            <i-button type="primary" @click="filterRepeatNumber">过滤重号</i-button>
                           </div>
                         </div>
                       </div>
@@ -51,11 +52,38 @@
              </i-content>
              <i-footer class="layout-footer-center">2019-2029 &copyright; </i-footer>
          </layout>
-
      </div>
+     <modal
+            v-model="modal1"
+            :title="modalTitle"
+            @on-ok="parseFiles"
+            :loading="loading"
+            width='60%'
+            :styles="{top:'200px'}">
+            <i-form label-position="left" :label-width="160">
+                <form-item :label="modalTitle">
+                    <upload
+                       multiple
+                       type="drag"
+                       action=""
+                       :show-upload-list="false"
+                       :accept="accept"
+                       :on-success="uploadSuccess"
+                       :on-error="uploadError"
+                       :before-upload="beforeUpload">
+                       <div style="padding: 20px 0">
+                           <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                           <p>点击或者拖拽文件到此完成上传。<span style="color:red">${uploadDesc}</span></p>
+                       </div>
+                   </upload>
+                  </form-item>
+                  <p>总共上传手机号码<span style="color:red">${mobileCount}</span>个</p>
+            </i-form>
+        </modal>
   </div>
 </body>
 <script type="text/javascript" src="public/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="public/js/lib/xlsx.core.min.js"></script>
 <script type="text/javascript" src="public/js/lib/vue.min.js"></script>
 <script type="text/javascript" src="public/js/lib/iview.min.js"></script>
 <script type="text/javascript" src="public/js/src/component/header.js"></script>

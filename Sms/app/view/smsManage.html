@@ -24,6 +24,9 @@
                       <div>
                         <i-input v-model="search_value" placeholder="请输入手机号码..." style="width: 300px"></i-input>
                         <i-button @click="searchClick">搜索</i-button>
+                        <i-select v-model="category" placeholder="请选择类别" style="width:200px;z-index: 10;">
+                          <i-option v-for="item in categorylList" :value="item.value" :key="item.value">${ item.label }</i-option>
+                        </i-select>
                       </div>
                       <i-select v-model="status" placeholder="请选择状态分类" style="width:200px;z-index: 10;">
                         <i-option v-for="item in statuslList" :value="item.value" :key="item.value">${ item.label }</i-option>

@@ -111,6 +111,22 @@ var app = new Vue({
             label: '失败'
           },
         ],
+        category:'category1',
+        categorylList: [
+          {
+            value: 'category1',
+            label: '普通短信'
+          },
+          {
+            value: 'category2',
+            label: '点对点短信'
+          },
+          {
+            value: 'category3',
+            label: '任务短信'
+          },
+
+        ],
       }
     },
     methods: {

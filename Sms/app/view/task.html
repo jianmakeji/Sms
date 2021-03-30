@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>赛赛科技电子律师函系统</title>
+  <title>木圣科技信使系统</title>
   <link rel="stylesheet" type="text/css" href="public/css/lib/iview.css">
   <link rel="stylesheet" type="text/css" href="public/css/src/frame.css" />
   <link rel="stylesheet" type="text/css" href="public/css/src/task.css" />
@@ -72,6 +72,19 @@
                    </upload>
                    <p>${recordCount}</p>
                   </form-item>
+            </i-form>
+        </modal>
+
+        <modal
+            v-model="modal2"
+            title="短信列表"
+            width='70%'
+            :styles="{top:'100px'}">
+            <i-form label-position="left" :label-width="160">
+                <i-table highlight-row ref="selectTaskRowTable"  :data="smsTableData" :columns="smsColumn"></i-table>
+                <div style="margin-top:20px;text-align:center">
+                <Page :total="smsTotal" @on-change="smsPageChange" show-total/>
+                </div>
             </i-form>
         </modal>
   </div>
