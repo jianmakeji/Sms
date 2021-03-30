@@ -36,6 +36,15 @@ class TaskSms extends Service {
     return result;
   }
 
+  async listTaskSmsByTaskId({ offset = 0, limit = 10, taskId = 0 }) {
+    const result = await this.ctx.model.TaskSms.listTaskSmsByTaskId({
+      offset,
+      limit,
+      taskId,
+    });
+    return result;
+  }
+
   async searchByMobile({ offset = 0, limit = 10, mobile = "" }) {
     const result = await this.ctx.model.TaskSms.searchByMobile({
       offset,

@@ -20,6 +20,23 @@ class MassSmsController extends BaseController{
     }
   }
 
+  async listMassSmsByMassId() {
+    const ctx = this.ctx;
+    const query = {
+      limit: ctx.helper.parseInt(ctx.query.limit),
+      offset: ctx.helper.parseInt(ctx.query.offset),
+      massId: ctx.helper.parseInt(ctx.query.massId),
+    };
+
+    try{
+      const result = await ctx.service.massSms.listMassSmsByMassId(query);
+      super.success(result);
+    }
+    catch(e){
+      super.failure(e.message);
+    }
+  }
+
   async show() {
     const ctx = this.ctx;
     try{

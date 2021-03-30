@@ -20,6 +20,23 @@ class TaskSmsController extends BaseController{
     }
   }
 
+  async listTaskSmsByMassId() {
+    const ctx = this.ctx;
+    const query = {
+      limit: ctx.helper.parseInt(ctx.query.limit),
+      offset: ctx.helper.parseInt(ctx.query.offset),
+      taskId: ctx.helper.parseInt(ctx.query.taskId),
+    };
+
+    try{
+      const result = await ctx.service.taskSms.listTaskSmsByTaskId(query);
+      super.success(result);
+    }
+    catch(e){
+      super.failure(e.message);
+    }
+  }
+
   async show() {
     const ctx = this.ctx;
     try{

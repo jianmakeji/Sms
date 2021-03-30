@@ -54,6 +54,24 @@ module.exports = (app) => {
     });
   };
 
+  MassSms.listMassSmsByMassId = async function ({ offset = 0, limit = 10, massId=0 }) {
+    let condition = {
+        offset,
+        limit,
+        order: [
+          ["createAt", "desc"],
+          ["Id", "desc"],
+        ],
+    };
+
+    if(taskId != 0){
+        condition.where = {};
+        condition.where.massId = massId;
+    }
+
+    return this.findAndCountAll(condition);
+  };
+
   MassSms.findMassSmsById = async function (id) {
     const masssms = await this.findByPk(id);
     if (!masssms) {

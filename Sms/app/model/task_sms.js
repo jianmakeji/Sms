@@ -58,6 +58,24 @@ module.exports = (app) => {
     });
   };
 
+  TaskSms.listTaskSmsByTaskId = async function ({ offset = 0, limit = 10, taskId=0 }) {
+    let condition = {
+        offset,
+        limit,
+        order: [
+          ["createAt", "desc"],
+          ["Id", "desc"],
+        ],
+    };
+
+    if(taskId != 0){
+        condition.where = {};
+        condition.where.taskId = taskId;
+    }
+
+    return this.findAndCountAll(condition);
+  };
+
   TaskSms.findTaskSmsById = async function (id) {
     const tasksms = await this.findByPk(id);
     if (!tasksms) {
