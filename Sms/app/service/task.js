@@ -17,6 +17,32 @@ class Task extends Service {
   }
 
   async create(task){
+    let name = data.name;
+    let channel = data.channel;
+    let mobiles = data.mobiles;
+    let mass = {content:content};
+    let transaction;
+    try {
+      transaction = await this.ctx.model.transaction();
+      let obj = await this.ctx.model.Task.createTask(task,transaction);
+      let massId = obj.Id;
+      let mobileArray = mobiles.split(',');
+      for (let mobile of mobileArray){
+        if(mobile != ''){
+          let massSms = {
+            mobile:mobile,
+            massId:massId,
+          };
+          await this.ctx.model.MassSms.createMassSms(massSms,transaction);
+        }
+      }
+      await transaction.commit();
+      return true
+    } catch (e) {
+      await transaction.rollback();
+      return false
+    }
+
     const result = await this.ctx.model.Task.createTask(task);
     return result;
   }

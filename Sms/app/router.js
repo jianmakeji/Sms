@@ -20,5 +20,6 @@ module.exports = app => {
   router.resources('mass', '/api/mass', controller.mass);
   router.resources('masssms', '/api/masssms', controller.masssms);
   router.resources('user', '/api/user', controller.user);
+  router.resources('channel', '/api/channel', controller.channel);
 
 };

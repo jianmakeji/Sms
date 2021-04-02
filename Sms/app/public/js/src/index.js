@@ -31,7 +31,7 @@ var app = new Vue({
           label: '中国移动'
         },
       ],
-      blockWords:[''],
+      blockWords:[],
     }
   },
   methods: {
@@ -75,7 +75,6 @@ var app = new Vue({
         this.$Message.error('没有需要检测的内容！');
         return;
       }
-
       for(let i = 0; i < this.blockWords.length; i++){
         if (this.sms_content.includes(this.blockWords[i])){
           this.$Message.error('关键词【 ' + this.blockWords[i] + ' 】为屏蔽词');
@@ -171,6 +170,9 @@ var app = new Vue({
         fileReader.readAsBinaryString(file);
       }
       return false;
+    },
+    loadingChannel(){
+
     }
   },
   mounted() {

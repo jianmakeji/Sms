@@ -3,7 +3,7 @@
 const Controller = require('egg').Controller;
 const BaseController = require('./BaseController');
 
-class MassController extends BaseController{
+class ChannelController extends BaseController{
   async index() {
     const ctx = this.ctx;
     const query = {
@@ -12,7 +12,7 @@ class MassController extends BaseController{
     };
 
     try{
-      const result = await ctx.service.mass.list(query);
+      const result = await ctx.service.channel.list(query);
       super.success(result);
     }
     catch(e){
@@ -23,7 +23,7 @@ class MassController extends BaseController{
   async show() {
     const ctx = this.ctx;
     try{
-      const result = await ctx.service.mass.find(ctx.helper.parseInt(ctx.params.id));
+      const result = await ctx.service.channel.find(ctx.helper.parseInt(ctx.params.id));
       super.success(result);
     }
     catch(e){
@@ -35,7 +35,7 @@ class MassController extends BaseController{
     const ctx = this.ctx;
     try{
       let data = ctx.request.body;
-      await ctx.service.mass.createMass(data);
+      await ctx.service.channel.createChannel(data);
       super.success('创建成功!');
     }
     catch(e){
@@ -52,7 +52,7 @@ class MassController extends BaseController{
     };
 
     try{
-      await ctx.service.mass.update({ id, updates });
+      await ctx.service.channel.update({ id, updates });
       super.success('更新成功!');
     }
     catch(e){
@@ -66,7 +66,7 @@ class MassController extends BaseController{
     const id = ctx.helper.parseInt(ctx.params.id);
 
     try{
-      await ctx.service.mass.del(id);
+      await ctx.service.channel.del(id);
       super.success('删除成功!');
     }
     catch(e){
@@ -74,27 +74,6 @@ class MassController extends BaseController{
     }
   }
 
-
-  async searchByContent(){
-    const ctx = this.ctx;
-    const limit = ctx.helper.parseInt(ctx.query.limit);
-    const offset = ctx.helper.parseInt(ctx.query.offset);
-    const content = ctx.query.content;
-    const query = {
-      limit:limit,
-      offset:offset,
-      content:content
-    };
-    try{
-      let result = await ctx.service.mass.searchByContent(query);
-      super.success(result);
-    }
-    catch(e){
-        console.log(e);
-      super.failure('获取数据失败');
-    }
-  }
-
 }
 
-module.exports = MassController;
+module.exports = ChannelController;

@@ -35,18 +35,15 @@ var HeaderMenu = {
   created() {
 
   },
+  //'<menu-item name="4" v-if="rolename == \'admin\'">' +
   template:'<i-header>'+
       '<i-menu mode="horizontal" theme="dark" @on-select="menuClick" :active-name="activename">' +
           '<div class="layout-logo">木圣科技信使系统</div>' +
           '<div class="layout-nav">' +
-          '<submenu name="1">' +
-            '<template slot="title">' +
-                '<icon type="md-chatbubbles" ></icon>' +
-                '普通短信' +
-                '</template>' +
-                '<menu-item name="1-1">群发短信</menu-item>' +
-                '<menu-item name="1-2">点对点</menu-item>' +
-            '</submenu>' +
+          '<menu-item name="1">' +
+                '<icon type="md-filing"></icon>' +
+                '群发短信' +
+            '</menu-item>' +
             '<menu-item name="2">' +
                 '<icon type="md-filing"></icon>' +
                 '任务短信' +
@@ -55,11 +52,11 @@ var HeaderMenu = {
                 '<icon type="md-mail"></icon>' +
                 '短信管理' +
             '</menu-item>' +
-            '<menu-item name="4" v-if="rolename == \'admin\'">' +
+            '<menu-item name="4">' +
                 '<icon type="md-crop"></icon>' +
                 '通道管理' +
             '</menu-item>' +
-            '<menu-item name="5" v-if="rolename == \'admin\'">' +
+            '<menu-item name="5">' +
                 '<icon type="md-contacts"></icon>' +
                 '用户管理' +
             '</menu-item>' +

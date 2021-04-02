@@ -115,14 +115,10 @@ var app = new Vue({
         categorylList: [
           {
             value: 'category1',
-            label: '普通短信'
+            label: '群发短信'
           },
           {
             value: 'category2',
-            label: '点对点短信'
-          },
-          {
-            value: 'category3',
             label: '任务短信'
           },
 
