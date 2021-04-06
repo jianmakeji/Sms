@@ -19,7 +19,10 @@ class Mass extends Service {
     let content = data.content;
     let channel = data.channel;
     let mobiles = data.mobiles;
-    let mass = {content:content};
+    let mass = {
+      channel:channel,
+      content:content
+    };
     let transaction;
     try {
       transaction = await this.ctx.model.transaction();
@@ -45,13 +48,30 @@ class Mass extends Service {
   }
 
   async update({ id, updates }) {
-    const result = await this.ctx.model.Mass.updateMass({ id, updates });
-    return result;
+    let transaction;
+    try {
+      transaction = await this.ctx.model.transaction();
+      await this.ctx.model.Mass.updateMass({ id, updates });
+      await transaction.commit();
+      return true
+    } catch (e) {
+      await transaction.rollback();
+      return false
+    }
   }
 
   async delete(id) {
-    const result = await this.ctx.model.Mass.delMassById(id);
-    return result;
+    let transaction;
+    try {
+      transaction = await this.ctx.model.transaction();
+      await this.ctx.model.Mass.delMassById(id);
+      await this.ctx.model.MassSms.delMassByMassId(id);
+      await transaction.commit();
+      return true
+    } catch (e) {
+      await transaction.rollback();
+      return false
+    }
   }
 
   async searchByContent(content) {

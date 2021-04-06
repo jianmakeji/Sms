@@ -14,7 +14,7 @@ module.exports = app => {
       type: STRING(15),
       allowNull: true
     },
-    name:{
+    money:{
       type: FLOAT,
       allowNull: true
     },
@@ -50,10 +50,9 @@ module.exports = app => {
     return Channel;
   }
 
-  Channel.createChannel = async function (Channel,transaction) {
-    return await this.create(Channel,{
-      transaction:transaction
-    });
+  Channel.createChannel = async function (channel) {
+    console.log('=====:'+channel);
+    return await this.create(channel);
   }
 
   Channel.updateChannel = async function ({ id, updates }) {

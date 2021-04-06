@@ -44,6 +44,24 @@ class HomeController extends Controller {
     ctx.logout();
     await ctx.render('login.html');
   }
+
+  async manageIndex(){
+    const ctx = this.ctx;
+    if(ctx.isAuthenticated()){
+      ctx.redirect('/manage');
+    }
+    else{
+      ctx.redirect('/login');
+    }
+  }
+
+  async relogin(){
+    const ctx = this.ctx;
+    await ctx.render('login.html', {
+      message:'用户名或者密码错误!'
+    });
+
+  }
 }
 
 module.exports = HomeController;

@@ -51,8 +51,8 @@
                     <i-input v-model="taskForm.name"></i-input>
                 </form-item>
                 <form-item label="发送通道">
-                    <i-select v-model="taskForm.channel" size="large" placeholder="请选择发送通道" style="width:200px;z-index: 10;">
-                        <i-option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                    <i-select v-model="taskForm.channelId" size="large" placeholder="请选择发送通道" style="width:200px;z-index: 10;">
+                        <i-option v-for="item in channelList" :value="item.value" :key="item.value">${ item.label }</i-option>
                      </i-select>
                 </form-item>
                 <form-item label="上传excel文件">

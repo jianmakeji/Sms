@@ -10,6 +10,14 @@ module.exports = app => {
       primaryKey: true,
       autoIncrement: true
     },
+    userId: {
+      type: INTEGER(11),
+      allowNull: false
+    },
+    channelId:{
+      type: INTEGER(11),
+      allowNull: false
+    },
     content:{
       type: STRING(520),
       allowNull: true
@@ -28,12 +36,17 @@ module.exports = app => {
 
   Mass.associate = function() {
     app.model.Mass.hasMany(app.model.MassSms,{sourceKey:'Id',foreignKey: 'massId'});
+    app.model.Task.hasOne(app.model.Channel,{sourceKey:'channelId',foreignKey: 'Id'});
   };
 
   Mass.listMass = async function ({ offset = 0, limit = 10 }) {
     return this.findAndCountAll({
       offset,
       limit,
+      include: [{
+        model: app.model.Channel,
+        attributes:['Id','name']
+      }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     });
   }
@@ -74,6 +87,10 @@ module.exports = app => {
     let condition = {
       offset,
       limit,
+      include: [{
+        model: app.model.Channel,
+        attributes:['Id','name']
+      }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     };
 

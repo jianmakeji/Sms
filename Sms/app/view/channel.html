@@ -22,13 +22,12 @@
                  <card>
                    <div class="oper_area">
                       <div>
-                        <i-input v-model="search_value" placeholder="请输入通道名称..." style="width: 300px"></i-input>
-                        <i-button @click="searchClick">搜索</i-button>
+
                       </div>
                       <i-button type="primary" @click="clickCreateChannel">新建短信通道</i-button>
                     </div>
                     <div style="margin-top:10px;">
-                      <i-table border :columns="columns" :data="tableData"></i-table>
+                      <i-table border :columns="columns" :data="channelData"></i-table>
                     </div>
                     <div style="margin-top:20px;text-align:center">
                       <Page :total="total" @on-change="pageChange" :current="currentPage" show-total/>
@@ -46,15 +45,15 @@
             width='60%'
             :styles="{top:'200px'}"
             @on-cancel="cancelCreateChannel">
-            <i-form :model="taskForm" label-position="left" :label-width="160">
+            <i-form :model="channelForm" label-position="left" :label-width="160">
                 <form-item label="通道名称">
-                    <i-input v-model="taskForm.name"></i-input>
+                    <i-input v-model="channelForm.name"></i-input>
                 </form-item>
                 <form-item label="每条计费金额">
-                    <i-input v-model="taskForm.money"></i-input>
+                    <i-input v-model="channelForm.money"></i-input>
                 </form-item>
                 <form-item label="备注">
-                    <i-input v-model="taskForm.remark"></i-input>
+                    <i-input v-model="channelForm.remark"></i-input>
                 </form-item>
             </i-form>
         </modal>

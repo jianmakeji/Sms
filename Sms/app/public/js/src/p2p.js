@@ -21,7 +21,7 @@ var app = new Vue({
 
         },
         totalTemplate:0,
-        channel:'',
+        channelId:0,
         channelList: [
           {
             value: 'channel1',

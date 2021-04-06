@@ -7,6 +7,7 @@ var app = new Vue({
     data() {
       return {
         search_value:'',
+        searchTag:0,
         columns:[
             {
                 title: 'ID',
@@ -20,7 +21,14 @@ var app = new Vue({
               },
               {
                 title: '发送数量',
-                key: 'smsCount',
+                key: 'sendCount',
+                align: 'center',
+              },
+              {
+                title: '通道名称',
+                render: (h, params) => {
+                  return h("span", this.tableData[params.index].channel.name);
+                },
                 align: 'center',
               },
               {
@@ -55,7 +63,7 @@ var app = new Vue({
                           },
                         on: {
                           click: () => {
-                            this.chcekSms(params.index)
+                            this.checkSms(params.index)
                           }
                         }
                     }, '查看短信'),
@@ -80,35 +88,24 @@ var app = new Vue({
               },
         ],
         tableData:[
-            {
-                Id:1,
-                name:'2021-03-25光大银行催收信息',
-                smsCount:10000,
-            }
+
         ],
-        currentPage:0,
+        updateOrCreate:0,
+        currentPage:1,
         total:0,
+        pageSize:10,
         modal1:false,
         loading:false,
         taskForm:{
-
+          channelId:0,
+          name:'',
+          excelFileName:''
         },
-        uploadActionUrl:'',
+        uploadActionUrl: '/file/uploadExcelFile/1',
         recordCount:'',
         channel:'',
         channelList: [
-          {
-            value: 'channel1',
-            label: '中国电信'
-          },
-          {
-            value: 'channel2',
-            label: '中国联通'
-          },
-          {
-            value: 'channel3',
-            label: '中国移动'
-          },
+
         ],
         modal2:false,
         smsColumn:[
@@ -183,42 +180,212 @@ var app = new Vue({
         ],
         smsTableData:[],
         smsTotal:0,
+        smsCurrentPage:1,
       }
     },
     methods: {
         searchClick(){
-
+          if(this.search_value == ''){
+            this.searchTag = 0;
+            this.currentPage = 1;
+            this.loadingTask();
+          }
+          else{
+            this.searchTag = 1;
+            this.currentPage = 1;
+            this.loadingSearchTask();
+          }
         },
         clickCreateTask(){
             this.modal1 = true;
         },
         pageChange(){
-
+          if(this.searchTag == 0){
+            this.loadingTask();
+          }
+          else{
+            this.loadingSearchTask();
+          }
         },
         createTask(){
+          if(this.taskForm.name == ''){
+            this.$Message.error('请输入任务名称！');
+            return;
+          }
 
+          if(this.taskForm.channelId == 0){
+            this.$Message.error('请选择通道名称！');
+            return;
+          }
+
+          if(this.taskForm.excelFileName == ''){
+            this.$Message.error('请上传Excel文件！');
+            return;
+          }
+
+          let that = this;
+          if(this.updateOrCreate == 0){
+            $.ajax({
+                url: '/api/task',
+                type: 'post',
+                data: that.taskForm,
+                success(res){
+                    that.loading = false;
+                    if (res.status == 200) {
+                      that.loadingTask();
+                      that.modal1 = false;
+                      that.$Message.info('创建成功！');
+                    } else {
+                      that.$Notice.error({title:'创建失败！',desc:res.data});
+                    }
+
+                }
+            });
+          }
+          else{
+            $.ajax({
+                url: '/api/task/'+this.channelForm.Id,
+                type: 'put',
+                data: that.taskForm,
+                success(res){
+                    that.loading = false;
+                    if (res.status == 200) {
+                      that.loadingTask();
+                      that.modal1 = false;
+                      that.$Message.info('更新成功！');
+                    } else {
+                      that.$Notice.error({title:'更新失败！',desc:res.data});
+                    }
+
+                }
+            });
+          }
         },
         cancelCreateTask(){
 
         },
-        uploadSuccess(){
-
+        uploadSuccess(response, file, fileList) {
+          if(response.status == 200){
+            this.recordCount = '当前总共需要上传' + response.countRecord + '条数据。';
+            this.taskForm.excelFileName = response.filename;
+            this.$Message.info('上传成功');
+          }
+          else{
+            console.log(response.message);
+            this.$Message.error('上传失败' + response.message);
+          }
         },
-        uploadError(){
-
+        uploadError(error, file, fileList) {
+          this.$Message.error('上传失败' + error);
         },
         beforeUpload(){
 
         },
-        chcekSms(index){
+        checkSms(index){
             this.modal2 = true;
+            this.loadingSmsByTaskId();
         },
-        smsPageChange(){
-
-        }
+        smsPageChange(page){
+          this.smsCurrentPage = page;
+          this.loadingSmsByTaskId();
+        },
+        loadingChannel(){
+          let that = this;
+          $.ajax({
+              url: '/api/channel',
+              type: 'get',
+              data: {
+                limit:100,
+                offset:0
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.channelList = [];
+                    let rows = res.data.rows;
+                    for (let i = 0; i < rows.length; i++){
+                      let obj = {};
+                      obj.label = rows[i].name;
+                      obj.value = rows[i].Id;
+                      that.channelList.push(obj);
+                    }
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingSearchTask(){
+        let that = this;
+          $.ajax({
+              url: '/api/task/searchByName',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize,
+                name:that.search_value,
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    that.tableData.push(...rows);
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingTask(){
+        let that = this;
+          $.ajax({
+              url: '/api/task',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    that.tableData.push(...rows);
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingSmsByTaskId(taskId){
+        let that = this;
+        $.ajax({
+              url: '/api/tasksms',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.smsCurrentPage - 1) * that.pageSize,
+                taskId:taskId,
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.smsTotal = res.data.count;
+                    that.smsTableData = [];
+                    let rows = res.data.rows;
+                    that.smsTableData.push(...rows);
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      checkStatus(index){
+        let data = this.smsTableData[index];
+      }
     },
     mounted() {
-
+      this.loadingChannel();
+      this.loadingTask();
     },
     created() {}
   });

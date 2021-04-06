@@ -103,6 +103,15 @@ module.exports = (app) => {
     });
   };
 
+  MassSms.delMassSmsByMassId = async function (massId, transaction) {
+    return await this.destroy({
+      transaction: transaction,
+      where: {
+        Id: massId,
+      },
+    });
+  };
+
   MassSms.searchByMobile = async function ({
     offset = 0,
     limit = 10,

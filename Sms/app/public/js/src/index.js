@@ -9,7 +9,7 @@ var app = new Vue({
       sms_content:'',
       mobile_content:'',
       mobileCount:0,
-      channel:'',
+      channelId:0,
       loading:false,
       modal1:false,
       modalTitle:'上传Excel文件',
@@ -18,18 +18,7 @@ var app = new Vue({
       uploadDesc:'注意：请上传后缀名为.xlsx的Excel文件',
       fileTag:0,
       channelList: [
-        {
-          value: 'channel1',
-          label: '中国电信'
-        },
-        {
-          value: 'channel2',
-          label: '中国联通'
-        },
-        {
-          value: 'channel3',
-          label: '中国移动'
-        },
+
       ],
       blockWords:[],
     }
@@ -172,11 +161,34 @@ var app = new Vue({
       return false;
     },
     loadingChannel(){
-
+      let that = this;
+        $.ajax({
+              url: '/api/channel',
+              type: 'get',
+              data: {
+                limit:100,
+                offset:0
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.channelList = [];
+                    let rows = res.data.rows;
+                    for (let i = 0; i < rows.length; i++){
+                      let obj = {};
+                      obj.label = rows[i].name;
+                      obj.value = rows[i].Id;
+                      that.channelList.push(obj);
+                    }
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+            }
+      });
     }
   },
   mounted() {
-
+    this.loadingChannel();
   },
   created() {}
 })

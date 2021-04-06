@@ -10,13 +10,21 @@ module.exports = app => {
       primaryKey: true,
       autoIncrement: true
     },
+    userId: {
+      type: INTEGER(11),
+      allowNull: false
+    },
     name:{
       type: STRING(255),
       allowNull: true
     },
+    channelId: {
+      type: INTEGER(11),
+      allowNull: false
+    },
     sendCount: {
       type: INTEGER(11),
-      defaultValue: ''
+      defaultValue: 0
     },
     createAt: {
       type: DATE,
@@ -32,12 +40,17 @@ module.exports = app => {
 
   Task.associate = function() {
     app.model.Task.hasMany(app.model.TaskSms,{sourceKey:'Id',foreignKey: 'taskId'});
+    app.model.Task.hasOne(app.model.Channel,{sourceKey:'channelId',foreignKey: 'Id'});
   };
 
   Task.listTask = async function ({ offset = 0, limit = 10 }) {
     return this.findAndCountAll({
       offset,
       limit,
+      include: [{
+        model: app.model.Channel,
+        attributes:['Id','name']
+      }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     });
   }
@@ -78,6 +91,10 @@ module.exports = app => {
     let condition = {
       offset,
       limit,
+      include: [{
+        model: app.model.Channel,
+        attributes:['Id','name']
+      }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     };
 

@@ -17,10 +17,6 @@ var app = new Vue({
           label: '管理员'
         },
         {
-          value: 3,
-          label: '律师'
-        },
-        {
           value: 2,
           label: '普通用户'
         }

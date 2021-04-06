@@ -25,22 +25,12 @@ module.exports = (app) => {
       },
       sendStatus: {
         type: INTEGER(8),
-        defaultValue: "",
+        allowNull: true,
       },
       sendResult: {
         type: STRING(30),
         allowNull: true,
-      },
-      createAt: {
-        type: DATE,
-        allowNull: false,
-        defaultValue: app.Sequelize.literal("CURRENT_TIMESTAMP"),
-        get() {
-          return moment(this.getDataValue("createAt")).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-        },
-      },
+      }
     },
     {
       tableName: "task_sms",
@@ -52,7 +42,6 @@ module.exports = (app) => {
       offset,
       limit,
       order: [
-        ["createAt", "desc"],
         ["Id", "desc"],
       ],
     });
@@ -63,7 +52,6 @@ module.exports = (app) => {
         offset,
         limit,
         order: [
-          ["createAt", "desc"],
           ["Id", "desc"],
         ],
     };
@@ -107,6 +95,15 @@ module.exports = (app) => {
     });
   };
 
+  TaskSms.delTaskSmsByTaskId = async function (taskId, transaction) {
+    return await this.destroy({
+      transaction: transaction,
+      where: {
+        taskId: taskId,
+      },
+    });
+  };
+
   TaskSms.searchByMobile = async function ({
     offset = 0,
     limit = 10,
@@ -116,7 +113,6 @@ module.exports = (app) => {
       offset,
       limit,
       order: [
-        ["createAt", "desc"],
         ["Id", "desc"],
       ],
     };

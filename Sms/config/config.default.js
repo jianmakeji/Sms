@@ -21,7 +21,7 @@ module.exports = appInfo => {
     port: 3306,
     username: 'root',
     password: 'root',
-    database: 'law_letter',
+    database: 'sms',
     logging:true,
     timezone: '+08:00',
     define: {
@@ -50,7 +50,7 @@ module.exports = appInfo => {
       timezone: '+08:00',
       dateStrings : true,
       password: 'root',
-      database: 'law_letter',
+      database: 'sms',
     },
     // 是否加载到 app 上，默认开启
     app: true,

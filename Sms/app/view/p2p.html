@@ -79,7 +79,7 @@
             @on-cancel="cancelSendData">
             <i-form :model="taskForm" label-position="left" :label-width="10">
                 <form-item label="">
-                    <i-select v-model="channel" size="large" placement="top" placeholder="请选择发送通道" style="width:200px;z-index: 10;">
+                    <i-select v-model="channelId" size="large" placement="top" placeholder="请选择发送通道" style="width:200px;z-index: 10;">
                         <i-option v-for="item in channelList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
                      </i-select>
                 </form-item>

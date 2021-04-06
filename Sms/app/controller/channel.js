@@ -35,7 +35,7 @@ class ChannelController extends BaseController{
     const ctx = this.ctx;
     try{
       let data = ctx.request.body;
-      await ctx.service.channel.createChannel(data);
+      await ctx.service.channel.create(data);
       super.success('创建成功!');
     }
     catch(e){
@@ -48,7 +48,9 @@ class ChannelController extends BaseController{
     const id = ctx.params.id;
     let body = ctx.request.body;
     let updates = {
-      content:body.content
+      name:body.name,
+      money:body.money,
+      remark:body.remark,
     };
 
     try{
@@ -66,7 +68,7 @@ class ChannelController extends BaseController{
     const id = ctx.helper.parseInt(ctx.params.id);
 
     try{
-      await ctx.service.channel.del(id);
+      await ctx.service.channel.delete(id);
       super.success('删除成功!');
     }
     catch(e){

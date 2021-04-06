@@ -9,6 +9,7 @@ module.exports = {
   baseUrl: '/public/excels/',
   basePath: path.join(__dirname, '../public/excels/'),
   exportBasePath: path.join(__dirname, '../public/export_excels/'),
+  task: 'task/',
 
   parseInt(string) {
     if (typeof string === 'number') return string;

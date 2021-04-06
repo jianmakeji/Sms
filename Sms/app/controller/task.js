@@ -2,6 +2,9 @@
 
 const Controller = require('egg').Controller;
 const BaseController = require('./BaseController');
+const fs = require('fs');
+const path = require('path');
+const Excel = require('exceljs');
 
 class TaskController extends BaseController{
   async index() {
@@ -33,9 +36,39 @@ class TaskController extends BaseController{
 
   async create() {
     const ctx = this.ctx;
+    let fileTagget = path.join(ctx.helper.basePath, ctx.helper.task);
+    let body = ctx.request.body;
+    let filename = body.excelFileName;
+    //let userId = ctx.helper.parseInt(ctx.user.Id);
+    let userId = 1;
+    let countRecord = 0;
+    var workbook = new Excel.Workbook();
+    let smsList = [];
+    let target = path.join(fileTagget,filename);
+    await workbook.xlsx.readFile(target).then(function() {
+      var worksheet = workbook.getWorksheet(1);
+      if(worksheet.rowCount > 1){
+        worksheet.eachRow({ includeEmpty: true },function(row, rowNumber) {
+          if (rowNumber != 1){
+              let smsObj = {
+                mobile : row.getCell(1).value,
+                content : row.getCell(2).value,
+              };
+              smsList.push(smsObj);
+          }
+        });
+        countRecord = smsList.length;
+      }
+    });
+    let taskObj = {
+      channel:body.channel,
+      userId:userId,
+      name:body.name,
+      sendCount:countRecord,
+    };
     try{
-      let data = ctx.request.body;
-      await ctx.service.task.createTask(data);
+      await ctx.service.task.create(taskObj,smsList);
+
       super.success('创建成功!');
     }
     catch(e){
@@ -47,12 +80,36 @@ class TaskController extends BaseController{
     const ctx = this.ctx;
     const id = ctx.params.id;
     let body = ctx.request.body;
-    let updates = {
+    let filename = body.excelFileName;
+    let userId = ctx.helper.parseInt(ctx.user.Id);
+    let countRecord = 0;
+    var workbook = new Excel.Workbook();
+    let smsList = [];
+    let target = path.join(fileTagget,filename);
+    await workbook.xlsx.readFile(target).then(function() {
+      var worksheet = workbook.getWorksheet(1);
+      if(worksheet.rowCount > 1){
+        worksheet.eachRow({ includeEmpty: true },function(row, rowNumber) {
+          if (rowNumber != 1){
+              let smsObj = {
+                mobile : row.getCell(1).value,
+                content : row.getCell(2).value,
+              };
+              smsList.push(smsObj);
+          }
+        });
+        countRecord = smsList.length;
+      }
+    });
+    let taskObj = {
+      channel:body.channel,
+      userId:userId,
       name:body.name,
+      sendCount:countRecord,
     };
 
     try{
-      await ctx.service.task.update({ id, updates });
+      await ctx.service.task.update({ id, taskObj, smsList});
       super.success('更新成功!');
     }
     catch(e){

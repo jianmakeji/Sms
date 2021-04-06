@@ -10,6 +10,10 @@ module.exports = app => {
       primaryKey: true,
       autoIncrement: true
     },
+    userId: {
+      type: INTEGER(11),
+      allowNull: false
+    },
     mobile:{
       type: STRING(15),
       allowNull: true

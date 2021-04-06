@@ -16,25 +16,41 @@ class Task extends Service {
     return task;
   }
 
-  async create(task){
-    let name = data.name;
-    let channel = data.channel;
-    let mobiles = data.mobiles;
-    let mass = {content:content};
+  async create(taskObj,smsList){
     let transaction;
     try {
       transaction = await this.ctx.model.transaction();
-      let obj = await this.ctx.model.Task.createTask(task,transaction);
-      let massId = obj.Id;
-      let mobileArray = mobiles.split(',');
-      for (let mobile of mobileArray){
-        if(mobile != ''){
-          let massSms = {
-            mobile:mobile,
-            massId:massId,
-          };
-          await this.ctx.model.MassSms.createMassSms(massSms,transaction);
-        }
+      let obj = await this.ctx.model.Task.createTask(taskObj,transaction);
+      for (let smsObj of smsList){
+        let taskSms = {
+            taskId:obj.Id,
+            mobile:smsObj.mobile,
+            content:smsObj.content,
+        };
+        await this.ctx.model.TaskSms.createTaskSms(taskSms,transaction);
+      }
+      await transaction.commit();
+      return true
+    } catch (e) {
+      console.log(e);
+      await transaction.rollback();
+      return false
+    }
+  }
+
+  async update({ id, updates, smsList }){
+    let transaction;
+    try {
+      transaction = await this.ctx.model.transaction();
+      const result = await this.ctx.model.Task.updateTask({ id, updates });
+      await this.ctx.model.TaskSms.delTaskSmsByTaskId(id,transaction);
+      for (let smsObj of smsList){
+        let taskSms = {
+            taskId:id,
+            mobile:smsObj.mobile,
+            content:smsObj.content,
+        };
+        await this.ctx.model.TaskSms.createTaskSms(taskSms,transaction);
       }
       await transaction.commit();
       return true
@@ -42,19 +58,20 @@ class Task extends Service {
       await transaction.rollback();
       return false
     }
-
-    const result = await this.ctx.model.Task.createTask(task);
-    return result;
-  }
-
-  async update({ id, updates }){
-    const result = await this.ctx.model.Task.updateTask({ id, updates });
-    return result;
   }
 
   async delete(id){
-    const result = await this.ctx.model.Task.delTaskById(id);
-    return result;
+    let transaction;
+    try {
+      transaction = await this.ctx.model.transaction();
+      await this.ctx.model.Task.delTaskById(id,transaction);
+      await this.ctx.model.TaskSms.delTaskSmsByTaskId(id,transaction);
+      await transaction.commit();
+      return true
+    } catch (e) {
+      await transaction.rollback();
+      return false
+    }
   }
 
   async searchByName({ offset = 0, limit = 10,name='' }){
