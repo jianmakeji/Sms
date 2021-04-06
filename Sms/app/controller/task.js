@@ -9,9 +9,19 @@ const Excel = require('exceljs');
 class TaskController extends BaseController{
   async index() {
     const ctx = this.ctx;
+    let userId = ctx.helper.parseInt(ctx.user.Id);
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
+      userId:userId
     };
 
     try{
@@ -136,6 +146,15 @@ class TaskController extends BaseController{
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const name = ctx.query.name;
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
+
     const query = {
       limit:limit,
       offset:offset,

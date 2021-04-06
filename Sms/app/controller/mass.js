@@ -6,9 +6,18 @@ const BaseController = require('./BaseController');
 class MassController extends BaseController{
   async index() {
     const ctx = this.ctx;
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
+      userId:userId
     };
 
     try{
@@ -80,10 +89,19 @@ class MassController extends BaseController{
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const content = ctx.query.content;
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
     const query = {
       limit:limit,
       offset:offset,
-      content:content
+      content:content,
+      userId:userId
     };
     try{
       let result = await ctx.service.mass.searchByContent(query);

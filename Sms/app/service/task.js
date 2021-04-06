@@ -4,10 +4,11 @@ const Service = require("egg").Service;
 
 class Task extends Service {
 
-  async list({ offset = 0, limit = 10 }) {
+  async list({ offset = 0, limit = 10, userId = 0 }) {
     return this.ctx.model.Task.listTask({
       offset,
       limit,
+      userId,
     });
   }
 
@@ -74,7 +75,7 @@ class Task extends Service {
     }
   }
 
-  async searchByName({ offset = 0, limit = 10,name='' }){
+  async searchByName({ offset = 0, limit = 10,name='',userId=0 }){
     const result = await this.ctx.model.Task.searchByName({offset,limit,name});
     return result;
   }

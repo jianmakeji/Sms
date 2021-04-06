@@ -40,7 +40,7 @@ module.exports = app => {
   };
 
   Mass.listMass = async function ({ offset = 0, limit = 10 }) {
-    return this.findAndCountAll({
+    let condition = {
       offset,
       limit,
       include: [{
@@ -48,7 +48,15 @@ module.exports = app => {
         attributes:['Id','name']
       }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
-    });
+    };
+
+    if(userId != 0){
+      condition.where = {
+        userId:userId
+      }
+    }
+
+    return this.findAndCountAll(condition);
   }
 
   Mass.findMassById = async function (id) {
@@ -94,11 +102,19 @@ module.exports = app => {
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     };
 
+    if((content != null && content !='') || userId != 0){
+      condition.where = {};
+    }
+
     if(content != null && content !=''){
       condition.where = {};
       condition.where.content = {
         [app.Sequelize.Op.like]: '%'+content+'%'
       }
+    }
+
+    if(userId != 0){
+      condition.where.userId = userId
     }
 
     return this.findAndCountAll(condition);

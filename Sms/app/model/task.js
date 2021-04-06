@@ -44,7 +44,8 @@ module.exports = app => {
   };
 
   Task.listTask = async function ({ offset = 0, limit = 10 }) {
-    return this.findAndCountAll({
+
+    let condition = {
       offset,
       limit,
       include: [{
@@ -52,7 +53,15 @@ module.exports = app => {
         attributes:['Id','name']
       }],
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
-    });
+    };
+
+    if(userId != 0){
+      condition.where = {
+        userId:userId
+      }
+    }
+
+    return this.findAndCountAll(condition);
   }
 
   Task.findTaskById = async function (id) {
@@ -86,7 +95,7 @@ module.exports = app => {
     });
   }
 
-  Task.searchByName = async function({ offset = 0, limit = 10, name='' }){
+  Task.searchByName = async function({ offset = 0, limit = 10, name='',userId = 0 }){
 
     let condition = {
       offset,
@@ -98,11 +107,18 @@ module.exports = app => {
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     };
 
-    if(name != null && name !=''){
+    if((name != null && name !='') || userId != 0){
       condition.where = {};
+    }
+
+    if(name != null && name !=''){
       condition.where.name = {
         [app.Sequelize.Op.like]: '%'+name+'%'
       }
+    }
+
+    if(userId != 0){
+      condition.where.userId = userId
     }
 
     return this.findAndCountAll(condition);
