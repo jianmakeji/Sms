@@ -9,6 +9,7 @@ class TaskSmsController extends BaseController{
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
+      taskId: ctx.helper.parseInt(ctx.query.taskId),
     };
 
     try{
@@ -97,7 +98,7 @@ class TaskSmsController extends BaseController{
     const ctx = this.ctx;
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
-    const content = ctx.query.mobile;
+    const mobile = ctx.query.mobile;
     const query = {
       limit:limit,
       offset:offset,
@@ -108,7 +109,7 @@ class TaskSmsController extends BaseController{
       super.success(result);
     }
     catch(e){
-        console.log(e);
+      console.log(e);
       super.failure('获取数据失败');
     }
   }

@@ -43,6 +43,10 @@ module.exports = (app) => {
     }
   );
 
+  MassSms.associate = function() {
+    app.model.MassSms.hasOne(app.model.Mass, {sourceKey:'massId',foreignKey: 'Id'});
+  };
+
   MassSms.listMassSms = async function ({ offset = 0, limit = 10 }) {
     return this.findAndCountAll({
       offset,

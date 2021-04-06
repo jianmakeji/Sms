@@ -35,4 +35,6 @@ module.exports = app => {
   router.post('/file/uploadExcelFile/:fileType',  controller.file.uploadExcelFile);
   router.post('/file/importSmsData/:fileType',  controller.file.importSmsData);
   router.get('/api/task/searchByName', controller.task.searchByName);
+  router.get('/api/masssms/searchByMobile', controller.masssms.searchByMobile);
+  router.get('/api/tasksms/searchByMobile', controller.tasksms.searchByMobile);
 };

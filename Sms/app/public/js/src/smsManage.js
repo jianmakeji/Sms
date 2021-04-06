@@ -78,14 +78,9 @@ var app = new Vue({
           },
         ],
         tableData:[
-          {
-            Id:1,
-            mobile:'19996969696',
-            content:'尊敬的xxxxxxxxxxxxxxxxxxxxxx',
-            status:5,
-            result:'该号码不存在'
-          }
+
         ],
+        pageSize:10,
         currentPage:0,
         total:0,
         status:'',
@@ -127,14 +122,154 @@ var app = new Vue({
     },
     methods: {
       searchClick(){
-
+        this.currentPage = 1;
+        if(this.search_value == ''){
+          if(this.category == 'category1'){
+            this.loadingTaskSms();
+          }
+          else{
+            this.loadingMassSms();
+          }
+        }
+        else{
+          if(this.category == 'category1'){
+            this.loadingTaskSmsByMobile();
+          }
+          else{
+            this.loadingMassSmsByMobile();
+          }
+        }
       },
-      pageChange(){
+      pageChange(page){
+        this.currentPage = page;
+        if(this.search_value == ''){
+          if(this.category == 'category1'){
+            this.loadingTaskSms();
+          }
+          else{
+            this.loadingMassSms();
+          }
+        }
+        else{
+          if(this.category == 'category1'){
+            this.loadingTaskSmsByMobile();
+          }
+          else{
+            this.loadingMassSmsByMobile();
+          }
+        }
+      },
+      loadingTaskSms(){
+        let that = this;
+        $.ajax({
+              url: '/api/tasksms',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize,
+                taskId:0
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    that.tableData.push(...rows);
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingTaskSmsByMobile(){
+        let that = this;
+        $.ajax({
+              url: '/api/tasksms/searchByMobile',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize,
+                taskId:0
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    that.tableData.push(...rows);
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingMassSms(){
+        let that = this;
+        $.ajax({
+              url: '/api/masssms',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize,
+                mobile:that.search_value
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    for (let  i = 0; i < rows.length; i++){
+                      let obj = {};
+                      obj.Id = rows[i].Id;
+                      obj.mobile = rows[i].mobile;
+                      obj.content = rows[i].mass.content;
+                      obj.sendStatus = rows[i].sendStatus;
+                      obj.sendResult = rows[i].sendResult;
+                      that.tableData.push(obj);
+                    }
 
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
+      },
+      loadingMassSmsByMobile(){
+        let that = this;
+        $.ajax({
+              url: '/api/masssms/searchByMobile',
+              type: 'get',
+              data: {
+                limit:that.pageSize,
+                offset:(that.currentPage - 1) * that.pageSize,
+                mobile:that.search_value
+              },
+              success(res){
+                  if (res.status == 200) {
+                    that.total = res.data.count;
+                    that.tableData = [];
+                    let rows = res.data.rows;
+                    for (let  i = 0; i < rows.length; i++){
+                      let obj = {};
+                      obj.Id = rows[i].Id;
+                      obj.mobile = rows[i].mobile;
+                      obj.content = rows[i].mass.content;
+                      obj.sendStatus = rows[i].sendStatus;
+                      obj.sendResult = rows[i].sendResult;
+                      that.tableData.push(obj);
+                    }
+
+                  } else {
+                    that.$Notice.error({title:'加载失败',desc:res.message});
+                  }
+              }
+        });
       }
     },
     mounted() {
-
+      this.loadingTaskSms();
     },
-    created() {}
+    created() {
+
+    }
   });
