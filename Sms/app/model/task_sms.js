@@ -41,10 +41,6 @@ module.exports = (app) => {
     return this.findAndCountAll({
       offset,
       limit,
-      include: [{
-        model: app.model.Mass,
-        attributes:['Id','content']
-      }],
       order: [
         ["Id", "desc"],
       ],
@@ -55,10 +51,6 @@ module.exports = (app) => {
     let condition = {
         offset,
         limit,
-        include: [{
-          model: app.model.Mass,
-          attributes:['Id','content']
-        }],
         order: [
           ["Id", "desc"],
         ],

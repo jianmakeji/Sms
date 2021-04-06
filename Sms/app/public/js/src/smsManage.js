@@ -81,7 +81,7 @@ var app = new Vue({
 
         ],
         pageSize:10,
-        currentPage:0,
+        currentPage:1,
         total:0,
         status:'',
         statuslList: [
