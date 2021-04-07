@@ -48,7 +48,7 @@ class HomeController extends Controller {
   async manageIndex(){
     const ctx = this.ctx;
     if(ctx.isAuthenticated()){
-      ctx.redirect('/manage');
+      ctx.redirect('/index');
     }
     else{
       ctx.redirect('/login');

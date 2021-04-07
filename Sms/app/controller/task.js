@@ -29,6 +29,7 @@ class TaskController extends BaseController{
       super.success(result);
     }
     catch(e){
+      console.log(e);
       super.failure(e.message);
     }
   }

@@ -7,6 +7,14 @@ class MassSmsController extends BaseController{
   async index() {
     const ctx = this.ctx;
     let userId = ctx.helper.parseInt(ctx.user.Id);
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
@@ -100,9 +108,15 @@ class MassSmsController extends BaseController{
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const mobile = ctx.query.mobile;
     const status = ctx.helper.parseInt(ctx.query.status);
-    //let userId = ctx.helper.parseInt(ctx.user.Id);
-
-    let userId = 1;
+    let userId = ctx.helper.parseInt(ctx.user.Id);
+    if(ctx.user){
+      if(ctx.user.roles[0].name == 'admin'){
+        userId = 0;
+      }
+    }
+    else{
+      userId = -1;
+    }
     const query = {
       limit:limit,
       offset:offset,

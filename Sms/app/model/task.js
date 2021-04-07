@@ -43,7 +43,7 @@ module.exports = app => {
     app.model.Task.hasOne(app.model.Channel,{sourceKey:'channelId',foreignKey: 'Id'});
   };
 
-  Task.listTask = async function ({ offset = 0, limit = 10 }) {
+  Task.listTask = async function ({ offset = 0, limit = 10, userId = 0 }) {
 
     let condition = {
       offset,
