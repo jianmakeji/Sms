@@ -107,7 +107,7 @@ module.exports = app => {
       order: [[ 'createAt', 'desc' ], [ 'Id', 'desc' ]],
     };
 
-    if((name != null && name !='') || userId != 0){
+    if((name != null && name !='') || userId != 0 || status != 0){
       condition.where = {};
     }
 

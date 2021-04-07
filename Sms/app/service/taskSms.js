@@ -56,12 +56,13 @@ class TaskSms extends Service {
     return result;
   }
 
-  async searchByMobile({ offset = 0, limit = 10, mobile = "",userId=0 }) {
+  async searchByMobile({ offset = 0, limit = 10, mobile = "",userId=0, status = 0 }) {
     const result = await this.ctx.model.TaskSms.searchByMobile({
       offset,
       limit,
       mobile,
-      userId
+      userId,
+      status
     });
     return result;
   }

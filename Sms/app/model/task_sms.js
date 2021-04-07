@@ -120,6 +120,7 @@ module.exports = (app) => {
     limit = 10,
     mobile = "",
     userId = 0,
+    status = 0
   }) {
     let condition = {
       offset,
@@ -136,11 +137,18 @@ module.exports = (app) => {
       ],
     };
 
-    if (mobile != null && mobile != "") {
+    if((mobile != null && mobile !='') || status != 0){
       condition.where = {};
+    }
+
+    if (mobile != null && mobile != "") {
       condition.where.mobile = {
         [app.Sequelize.Op.like]: "%" + mobile + "%",
       };
+    }
+
+    if(status != 0){
+      condition.where.sendStatus = status;
     }
 
     return this.findAndCountAll(condition);

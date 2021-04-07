@@ -102,6 +102,7 @@ class TaskSmsController extends BaseController{
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const mobile = ctx.query.mobile;
+    const status = ctx.helper.parseInt(ctx.query.status);
     //let userId = ctx.helper.parseInt(ctx.user.Id);
 
     let userId = 1;
@@ -109,7 +110,8 @@ class TaskSmsController extends BaseController{
       limit:limit,
       offset:offset,
       mobile:mobile,
-      userId:userId
+      userId:userId,
+      status:status
     };
     console.log(query);
     try{

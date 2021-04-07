@@ -99,10 +99,16 @@ class MassSmsController extends BaseController{
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const mobile = ctx.query.mobile;
+    const status = ctx.helper.parseInt(ctx.query.status);
+    //let userId = ctx.helper.parseInt(ctx.user.Id);
+
+    let userId = 1;
     const query = {
       limit:limit,
       offset:offset,
-      mobile:mobile
+      mobile:mobile,
+      userId:userId,
+      status:status
     };
     try{
       let result = await ctx.service.massSms.searchByMobile(query);

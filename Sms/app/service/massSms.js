@@ -41,8 +41,8 @@ class MassSms extends Service {
     return result;
   }
 
-  async searchByMobile({ offset = 0, limit = 10, mobile='',userId = 0, }) {
-    const result = await this.ctx.model.MassSms.searchByMobile({offset, limit, mobile,userId});
+  async searchByMobile({ offset = 0, limit = 10, mobile='',userId = 0, status = 0}) {
+    const result = await this.ctx.model.MassSms.searchByMobile({offset, limit, mobile, userId, status});
     return result;
   }
 
