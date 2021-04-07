@@ -21,22 +21,12 @@ module.exports = (app) => {
       },
       sendStatus: {
         type: INTEGER(8),
-        defaultValue: "",
+        allowNull: true,
       },
       sendResult: {
         type: STRING(30),
         allowNull: true,
-      },
-      createAt: {
-        type: DATE,
-        allowNull: false,
-        defaultValue: app.Sequelize.literal("CURRENT_TIMESTAMP"),
-        get() {
-          return moment(this.getDataValue("createAt")).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-        },
-      },
+      }
     },
     {
       tableName: "mass_sms",
@@ -47,12 +37,18 @@ module.exports = (app) => {
     app.model.MassSms.hasOne(app.model.Mass, {sourceKey:'massId',foreignKey: 'Id'});
   };
 
-  MassSms.listMassSms = async function ({ offset = 0, limit = 10 }) {
+  MassSms.listMassSms = async function ({ offset = 0, limit = 10,userId = 0 }) {
     return this.findAndCountAll({
       offset,
       limit,
+      include: [{
+        model: app.model.Mass,
+        attributes:['Id','content'],
+        where:{
+          userId:userId
+        }
+      }],
       order: [
-        ["createAt", "desc"],
         ["Id", "desc"],
       ],
     });
@@ -62,13 +58,16 @@ module.exports = (app) => {
     let condition = {
         offset,
         limit,
+        include: [{
+          model: app.model.Mass,
+          attributes:['Id','content']
+        }],
         order: [
-          ["createAt", "desc"],
           ["Id", "desc"],
         ],
     };
 
-    if(taskId != 0){
+    if(massId != 0){
         condition.where = {};
         condition.where.massId = massId;
     }
@@ -120,12 +119,19 @@ module.exports = (app) => {
     offset = 0,
     limit = 10,
     mobile = "",
+    userId = 0,
   }) {
     let condition = {
       offset,
       limit,
+      include: [{
+        model: app.model.Mass,
+        attributes:['Id','content'],
+        where:{
+          userId:userId
+        }
+      }],
       order: [
-        ["createAt", "desc"],
         ["Id", "desc"],
       ],
     };

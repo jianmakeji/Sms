@@ -24,6 +24,12 @@ module.exports = app => {
     successReturnToOrRedirect : '/manageIndex',successFlash: true,
     failureRedirect: '/relogin',failureFlash: true }));
 
+  router.post('/file/uploadExcelFile/:fileType',  controller.file.uploadExcelFile);
+  router.post('/file/importSmsData/:fileType',  controller.file.importSmsData);
+  router.get('/api/task/searchByName', controller.task.searchByName);
+  router.get('masssms_searchByMobile','/api/masssms/searchByMobile', controller.masssms.searchByMobile);
+  router.get('tasksms_searchByMobile','/api/tasksms/searchByMobile', controller.tasksms.searchByMobile);
+
   router.resources('task', '/api/task', controller.task);
   router.resources('tasksms', '/api/tasksms', controller.tasksms);
   router.resources('p2p', '/api/p2p', controller.p2p);
@@ -32,9 +38,5 @@ module.exports = app => {
   router.resources('user', '/api/user', controller.user);
   router.resources('channel', '/api/channel', controller.channel);
 
-  router.post('/file/uploadExcelFile/:fileType',  controller.file.uploadExcelFile);
-  router.post('/file/importSmsData/:fileType',  controller.file.importSmsData);
-  router.get('/api/task/searchByName', controller.task.searchByName);
-  router.get('/api/masssms/searchByMobile', controller.masssms.searchByMobile);
-  router.get('/api/tasksms/searchByMobile', controller.tasksms.searchByMobile);
+
 };

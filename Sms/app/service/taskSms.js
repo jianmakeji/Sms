@@ -4,11 +4,12 @@ const Service = require("egg").Service;
 
 class TaskSms extends Service {
 
-  async list({ offset = 0, limit = 10,taskId =0 }) {
+  async list({ offset = 0, limit = 10,taskId =0,userId=0 }) {
     if(taskId == 0){
       return this.ctx.model.TaskSms.listTaskSms({
         offset,
         limit,
+        userId,
       });
     }
     else{
@@ -55,11 +56,12 @@ class TaskSms extends Service {
     return result;
   }
 
-  async searchByMobile({ offset = 0, limit = 10, mobile = "" }) {
+  async searchByMobile({ offset = 0, limit = 10, mobile = "",userId=0 }) {
     const result = await this.ctx.model.TaskSms.searchByMobile({
       offset,
       limit,
       mobile,
+      userId
     });
     return result;
   }

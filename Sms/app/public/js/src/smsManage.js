@@ -86,23 +86,23 @@ var app = new Vue({
         status:'',
         statuslList: [
           {
-            value: 'status1',
+            value: '1',
             label: '已发送'
           },
           {
-            value: 'status2',
+            value: '2',
             label: '未发送'
           },
           {
-            value: 'status3',
+            value: '3',
             label: '发送中'
           },
           {
-            value: 'status4',
+            value: '4',
             label: '成功'
           },
           {
-            value: 'status5',
+            value: '5',
             label: '失败'
           },
         ],
@@ -123,8 +123,8 @@ var app = new Vue({
     methods: {
       searchClick(){
         this.currentPage = 1;
-        if(this.search_value == ''){
-          if(this.category == 'category1'){
+        if(this.search_value == ''  && this.status == 0){
+          if(this.category == 'category2'){
             this.loadingTaskSms();
           }
           else{
@@ -132,7 +132,7 @@ var app = new Vue({
           }
         }
         else{
-          if(this.category == 'category1'){
+          if(this.category == 'category2'){
             this.loadingTaskSmsByMobile();
           }
           else{
@@ -142,8 +142,8 @@ var app = new Vue({
       },
       pageChange(page){
         this.currentPage = page;
-        if(this.search_value == ''){
-          if(this.category == 'category1'){
+        if(this.search_value == '' && this.status == 0){
+          if(this.category == 'category2'){
             this.loadingTaskSms();
           }
           else{
@@ -151,7 +151,7 @@ var app = new Vue({
           }
         }
         else{
-          if(this.category == 'category1'){
+          if(this.category == 'category2'){
             this.loadingTaskSmsByMobile();
           }
           else{
@@ -189,7 +189,9 @@ var app = new Vue({
               data: {
                 limit:that.pageSize,
                 offset:(that.currentPage - 1) * that.pageSize,
-                taskId:0
+                taskId:0,
+                status:that.status,
+                mobile:that.search_value,
               },
               success(res){
                   if (res.status == 200) {
@@ -211,7 +213,6 @@ var app = new Vue({
               data: {
                 limit:that.pageSize,
                 offset:(that.currentPage - 1) * that.pageSize,
-                mobile:that.search_value
               },
               success(res){
                   if (res.status == 200) {
@@ -242,7 +243,8 @@ var app = new Vue({
               data: {
                 limit:that.pageSize,
                 offset:(that.currentPage - 1) * that.pageSize,
-                mobile:that.search_value
+                mobile:that.search_value,
+                status:that.status,
               },
               success(res){
                   if (res.status == 200) {
@@ -267,7 +269,7 @@ var app = new Vue({
       }
     },
     mounted() {
-      this.loadingTaskSms();
+      this.loadingMassSms();
     },
     created() {
 

@@ -4,10 +4,11 @@ const Service = require("egg").Service;
 
 class MassSms extends Service {
 
-  async list({ offset = 0, limit = 10 }) {
+  async list({ offset = 0, limit = 10, userId = 0 }) {
     return this.ctx.model.MassSms.listMassSms({
       offset,
       limit,
+      userId,
     });
   }
 
@@ -40,8 +41,8 @@ class MassSms extends Service {
     return result;
   }
 
-  async searchByMobile({ offset = 0, limit = 10, mobile='' }) {
-    const result = await this.ctx.model.MassSms.searchByMobile({offset, limit, mobile});
+  async searchByMobile({ offset = 0, limit = 10, mobile='',userId = 0, }) {
+    const result = await this.ctx.model.MassSms.searchByMobile({offset, limit, mobile,userId});
     return result;
   }
 

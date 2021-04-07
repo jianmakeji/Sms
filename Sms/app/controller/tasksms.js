@@ -6,10 +6,12 @@ const BaseController = require('./BaseController');
 class TaskSmsController extends BaseController{
   async index() {
     const ctx = this.ctx;
+    let userId = ctx.helper.parseInt(ctx.user.Id);
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
       taskId: ctx.helper.parseInt(ctx.query.taskId),
+      userId:userId,
     };
 
     try{
@@ -45,6 +47,7 @@ class TaskSmsController extends BaseController{
       super.success(result);
     }
     catch(e){
+      console.log(e);
       super.failure(e.message);
     }
   }
@@ -99,11 +102,16 @@ class TaskSmsController extends BaseController{
     const limit = ctx.helper.parseInt(ctx.query.limit);
     const offset = ctx.helper.parseInt(ctx.query.offset);
     const mobile = ctx.query.mobile;
+    //let userId = ctx.helper.parseInt(ctx.user.Id);
+
+    let userId = 1;
     const query = {
       limit:limit,
       offset:offset,
-      mobile:mobile
+      mobile:mobile,
+      userId:userId
     };
+    console.log(query);
     try{
       let result = await ctx.service.taskSms.searchByMobile(query);
       super.success(result);

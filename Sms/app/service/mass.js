@@ -18,11 +18,13 @@ class Mass extends Service {
 
   async create(data) {
     let content = data.content;
-    let channel = data.channel;
+    let channelId = data.channelId;
     let mobiles = data.mobiles;
+    let userId = data.userId;
     let mass = {
-      channel:channel,
-      content:content
+      channelId:channelId,
+      content:content,
+      userId:userId
     };
     let transaction;
     try {
@@ -42,6 +44,7 @@ class Mass extends Service {
       await transaction.commit();
       return true
     } catch (e) {
+      console.log(e);
       await transaction.rollback();
       return false
     }

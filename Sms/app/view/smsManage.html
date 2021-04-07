@@ -26,11 +26,12 @@
                         <i-select v-model="category" placeholder="请选择类别" style="width:200px;z-index: 10;">
                           <i-option v-for="item in categorylList" :value="item.value" :key="item.value">${ item.label }</i-option>
                         </i-select>
+                        <i-select v-model="status" placeholder="请选择状态分类" style="width:200px;z-index: 10;">
+                          <i-option v-for="item in statuslList" :value="item.value" :key="item.value">${ item.label }</i-option>
+                        </i-select>
                         <i-button @click="searchClick">搜索</i-button>
                       </div>
-                      <i-select v-model="status" placeholder="请选择状态分类" style="width:200px;z-index: 10;">
-                        <i-option v-for="item in statuslList" :value="item.value" :key="item.value">${ item.label }</i-option>
-                      </i-select>
+
                     </div>
                     <div style="margin-top:10px;">
                       <i-table border :columns="columns" :data="tableData"></i-table>

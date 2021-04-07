@@ -37,10 +37,21 @@ module.exports = (app) => {
     }
   );
 
-  TaskSms.listTaskSms = async function ({ offset = 0, limit = 10 }) {
+  TaskSms.associate = function() {
+    app.model.TaskSms.hasOne(app.model.Task, {sourceKey:'taskId',foreignKey: 'Id'});
+  };
+
+  TaskSms.listTaskSms = async function ({ offset = 0, limit = 10,userId=0 }) {
     return this.findAndCountAll({
       offset,
       limit,
+      include: [{
+        model: app.model.Task,
+        attributes:['Id','name'],
+        where:{
+          userId:userId
+        }
+      }],
       order: [
         ["Id", "desc"],
       ],
@@ -67,7 +78,7 @@ module.exports = (app) => {
   TaskSms.findTaskSmsById = async function (id) {
     const tasksms = await this.findByPk(id);
     if (!tasksms) {
-      throw new Error("user not found");
+      throw new Error("tasksms not found");
     }
     return tasksms;
   };
@@ -108,13 +119,17 @@ module.exports = (app) => {
     offset = 0,
     limit = 10,
     mobile = "",
+    userId = 0,
   }) {
     let condition = {
       offset,
       limit,
       include: [{
-        model: app.model.Mass,
-        attributes:['Id','content']
+        model: app.model.Task,
+        attributes:['Id','name'],
+        where:{
+          userId:userId
+        }
       }],
       order: [
         ["Id", "desc"],

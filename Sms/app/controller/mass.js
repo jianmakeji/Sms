@@ -44,10 +44,19 @@ class MassController extends BaseController{
     const ctx = this.ctx;
     try{
       let data = ctx.request.body;
-      await ctx.service.mass.createMass(data);
-      super.success('创建成功!');
+      //let userId = ctx.helper.parseInt(ctx.user.Id);
+      let userId = 1;
+      data.userId = userId;
+      let result = await ctx.service.mass.create(data);
+      if(result){
+        super.success('创建成功!');
+      }
+      else{
+        super.success('创建失败!');
+      }
     }
     catch(e){
+
       super.failure(e.message);
     }
   }

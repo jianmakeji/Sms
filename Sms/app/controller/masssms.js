@@ -6,9 +6,11 @@ const BaseController = require('./BaseController');
 class MassSmsController extends BaseController{
   async index() {
     const ctx = this.ctx;
+    let userId = ctx.helper.parseInt(ctx.user.Id);
     const query = {
       limit: ctx.helper.parseInt(ctx.query.limit),
       offset: ctx.helper.parseInt(ctx.query.offset),
+      userId:userId
     };
 
     try{

@@ -86,6 +86,7 @@ var app = new Vue({
       }
       this.mobile_content = result;
       this.$Message.success('过滤完毕！');
+      this.mobileCount = this.mobile_content.split(',').length - 1;
     },
     filterRepeatNumber(){
       if(this.mobile_content == ''){
@@ -105,18 +106,19 @@ var app = new Vue({
       }
       this.mobile_content = mobiles;
       this.$Message.success('过滤完毕！');
+      this.mobileCount = this.mobile_content.split(',').length - 1;
     },
     uploadError(){
 
     },
     beforeUpload(file){
       let that = this;
-      console.log(this.fileTag);
       if(this.fileTag == 2){
         var reader = new FileReader();
         reader.onload = function() {
            if(reader.result) {
             that.mobile_content = reader.result;
+            that.mobileCount = that.mobile_content.split(',').length - 1;
            }
         };
         reader.readAsText(file);
@@ -150,6 +152,7 @@ var app = new Vue({
               }
             }
             that.mobile_content = mobileStr;
+            that.mobileCount = that.mobile_content.split(',').length - 1;
           } catch (e) {
               console.log(e);
               return;
@@ -184,6 +187,44 @@ var app = new Vue({
                     that.$Notice.error({title:'加载失败',desc:res.message});
                   }
             }
+      });
+    },
+    clearBtnClick(){
+      this.mobile_content = '';
+      this.sms_content = '';
+    },
+    sendSms(){
+      if(this.sms_content == ''){
+        this.$Message.error('没有需要发送的内容！');
+        return;
+      }
+
+      if(this.mobile_content == ''){
+        this.$Message.error('没有需要发送的号码！');
+        return;
+      }
+
+      if(this.channelId == 0){
+        this.$Message.error('请选择发送通道！');
+        return;
+      }
+
+      let that = this;
+       $.ajax({
+          url: '/api/mass',
+          type: 'post',
+          data: {
+            content:that.sms_content,
+            mobiles:that.mobile_content,
+            channelId:that.channelId
+          },
+          success(res){
+            if (res.status == 200) {
+              that.$Message.success('提交成功！');
+            } else {
+              that.$Notice.error({title:'提交失败',desc:res.message});
+            }
+          }
       });
     }
   },
